@@ -1,0 +1,173 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Picture
+ *
+ * @Vich\Uploadable
+ * @ORM\Table(name="picture")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PictureRepository")
+ */
+class PictureMany
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @var string
+     */
+    private $imageName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alt", type="string", length=255)
+     */
+    private $alt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Recipe", inversedBy="pictures")
+     * @ORM\JoinColumn(name="recipe_ref", referencedColumnName="id", nullable=true)
+     */
+    private $recipe;
+
+
+    /**
+     * @Vich\UploadableField(mapping="picture", fileNameProperty="imageName")
+     * @Assert\File(
+     * maxSize="1000k",
+     * maxSizeMessage="Le fichier excède 1000Ko.",
+     * mimeTypes={"image/png", "image/jpeg", "image/jpg", "image/gif"},
+     * mimeTypesMessage= "formats autorisés: png, jpeg, jpg, gif"
+     * )
+     * @var File
+     */
+    private $imageFile;
+
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tmpFile;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+    /**
+     * Set alt
+     *
+     * @param string $alt
+     *
+     * @return PictureMany
+     */
+    public function setAlt($alt)
+    {
+        $this->alt = $alt;
+
+        return $this;
+    }
+
+    /**
+     * Get alt
+     *
+     * @return string
+     */
+    public function getAlt()
+    {
+        return $this->alt;
+    }
+
+
+    public function setRecipe(Recipe $recipe)
+    {
+        $this->recipe = $recipe;
+    }
+
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    public function getUpdatedAt(){
+        return $this->updatedAt;
+    }
+
+    /*
+    * Set tmpFile
+    * @return Image
+    */
+    public function setTmpFile($tmpFile)
+    {
+        $this->tmpFile = $tmpFile;
+        return $this;
+    }
+
+    /*
+    * Get tmpFile
+    * @return string
+    */
+    public function getTmpFile()
+    {
+        return $this->tmpFile;
+    }
+
+    public function __toString(){
+        return (string) $this->imageName;
+    }
+}
+

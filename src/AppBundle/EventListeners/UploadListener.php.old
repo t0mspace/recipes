@@ -1,0 +1,94 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: t0m
+ * Date: 13/04/2018
+ * Time: 21:13
+ */
+
+namespace AppBundle\EventListeners;
+
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use AppBundle\Entity\Picture;
+use Vich\UploaderBundle\Event\Event;
+use Doctrine\ORM\EntityManagerInterface;
+
+class UploadListener
+{
+    private $path_image;
+    private $orm;
+
+    public function __construct(string $path_image)
+    {
+        $this->path_image = $path_image;
+        $this->orm = $orm;
+    }
+
+    public function preUpload(Event $event)
+    {
+        $object = $event->getObject();
+        $mapping = $event->getMapping();
+
+        // do your stuff with $object and/or $mapping...
+    }
+
+
+    public function onVichUploaderPreInject(Event $args)
+    {
+        $entity = $args->getObject();
+
+        if (!$entity instanceof Picture) {
+            return;
+        }
+
+        $image = $entity->getImage();
+        $entity->setTmpFile($image);
+        $this->orm->flush();
+
+    }
+
+
+    public function postUpdate(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+
+        if (!$entity instanceof Picture) {
+            return;
+        }
+        $changeSet = $args->getEntityManager()->getUnitOfWork()->getEntityChangeSet($entity);
+
+        if(!array_key_exists("image", $changeSet)){
+            return;
+        }
+
+
+    }
+
+    public function preRemove(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+
+        if (!$entity instanceof Picture) {
+            return;
+        }
+
+        $target = $this->path_image.'/'.$entity->getImage();
+    }
+
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+
+        if (!$entity instanceof Picture) {
+            return;
+        }
+        $file = $this->path_image.'/'.$entity->getImage();
+    }
+
+
+
+    public function setCacheManager($cacheManager)
+    {
+        $this->setCacheManager($cacheManager);
+    }
+}

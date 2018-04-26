@@ -1,0 +1,25 @@
+site rcettes avec:
+
+
+Dictionnaire de données:
+Nom de la recette 
+recipe_name (string)
+Difficulté 
+=> difficulty_level:  int
+temps de préparation
+=> peparation_time: string
+temps de cuisson
+=> cooking time: string
+cout
+=> cost: int
+Nombre de personnes:
+nbre_people: int
+preparation_type: string
+explanations: text
+
+inviter des amis
+
+
+next functionnalities: 
+-database with ingredients instead of recipes
+lier avec une application de gestion de frigo

@@ -1,0 +1,81 @@
+
+
+
+#
+#easy_admin_bundle:
+#    resource: "@EasyAdminBundle/Controller/AdminController.php"
+#    type:     annotation
+#    prefix:   /admin
+home:
+    path:      /
+    defaults: { _controller: AppBundle:Public:getAll }
+
+
+admin:
+    path:      /admin
+    defaults: { _controller: AppBundle:Admin\Recipe:index }
+
+recipe_add:
+    path:      /admin/recipe/add
+    defaults: { _controller: AppBundle:Admin\Recipe:add }
+
+recipe_show:
+    path:      /admin/recipe/show/{id}
+    defaults: { _controller: AppBundle:Admin\Recipe:show }
+
+
+recipe_index:
+    path:      /admin/recipe/index
+    defaults: { _controller: AppBundle:Admin\Recipe:index }
+
+recipe_delete:
+    path:      /admin/recipe/delete/{id}
+    defaults: { _controller: AppBundle:Admin\Recipe:delete }
+
+recipe_edit:
+    path:      /admin/recipe/edit/{id}
+    defaults: { _controller: AppBundle:Admin\Recipe:edit }
+
+
+
+user_index:
+    path:      /admin/user/index
+    defaults: { _controller: AppBundle:Admin\User:index }
+
+user_new:
+    path:      /admin/user/new
+    defaults: { _controller: AppBundle:Admin\User:add }
+
+user_edit:
+    path:      /admin/user/edit/
+    defaults: { _controller: AppBundle:Admin\User:edit }
+
+user_show:
+    path:      /admin/user/show/{id}
+    defaults: { _controller: AppBundle:Admin\User:show }
+
+user_delete:
+    path:      /admin/user/delete/{id}
+    defaults: { _controller: AppBundle:Admin\User:delete }
+
+user_change_password:
+    path:      /admin/user/changePassword
+    defaults: { _controller: AppBundle:Admin\User:changePassword }
+
+
+security_login:
+    path:      /login
+    defaults: { _controller: AppBundle:Security:login }
+
+login_check:
+    path:      /login_check
+    defaults: { _controller: AppBundle:Security:loginCheck }
+
+logout:
+    path:      /logout
+    defaults:
+        _controller: AppBundle:Security:logout
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.yaml"
+
